@@ -10,17 +10,19 @@ def get_possible_letters(dictionary, clues, poss_letter_set):
             # length of word is == length of clue
             poss_for_this_clue = set()
             clue_matches = True
+            poss_wildcards = set()
             for i in range(len(clue)):
                 cl = clue[i]
                 dwl = dic_word[i]
                 if cl == '?':
                     # TODO(iandioch): Check for repeated ?s in the clue.
                     poss_for_this_clue.add(dwl)
-                    continue
-                if cl != dwl:
+                elif cl == '*':
+                    poss_wildcards.add(dwl)
+                elif cl != dwl:
                     clue_matches = False
                     break
-            if clue_matches and len(poss_for_this_clue) == 1:
+            if clue_matches and len(poss_for_this_clue) == 1 and len(poss_wildcards) <= 1:
                 poss_letters.add(next(iter(poss_for_this_clue)))
                 poss_words.append(dic_word)
         print('Possible words for clue {}: {}'.format(clue, poss_words))
