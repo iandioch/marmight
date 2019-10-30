@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 def get_possible_letters(dictionary, clues, poss_letter_set):
     print('Possible letters:', sorted(poss_letter_set))
     # TODO(iandioch): Support wildcards in clues.
@@ -50,14 +52,16 @@ def solve_word(dictionary, letters):
         possible_letter_combinations = new_combo
     print(possible_letter_combinations)
     
-    sorted_to_word = {''.join(sorted(w)):w for w in dictionary}
+    sorted_to_words = defaultdict(list)
+    for word in dictionary:
+        sorted_to_words[''.join(sorted(word))].append(word)
+
     possible_words = []
 
     for letters in possible_letter_combinations:
         sorted_letters = ''.join(sorted(letters))
-        for sorted_word in sorted_to_word:
-            if sorted_letters == sorted_word:
-                possible_words.append(sorted_to_word[sorted_word])
+        if len(sorted_to_words[sorted_letters]):
+            possible_words.extend(sorted_to_words[sorted_letters])
 
     return possible_words
 
